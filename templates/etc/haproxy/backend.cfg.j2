@@ -43,4 +43,10 @@ backend {{ backend.name }}
 
 {% endfor %}
 
+{% for host in hostvars | dictsort | selectattr('1.haproxy_backend_member', 'defined') | selectattr('1.haproxy_backend_member.' ~ backend.name, 'defined') | list %}
+  {% set _server = host[1]['haproxy_backend_member'][backend.name] %}
+  server {{ _server.name }} {{ _server.listen }} {{ _server.param | default([]) | join(' ') }}
+
+{% endfor %}
+
 {% endfor %}
