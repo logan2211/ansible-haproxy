@@ -84,4 +84,15 @@ backend {{ backend.name }}
 
 {% endfor %}
 
+{% if haproxy_backend_search | bool %}
+{% for _server in groups[haproxy_backend_search_group] |
+                  map('extract', hostvars, haproxy_backend_search_var) |
+                  select('defined') |
+                  map(attribute=backend.name) |
+                  select('defined') | list %}
+  server {{ _server.name }} {{ _server.listen }} {{ _server.param | default([]) | join(' ') }}
+
+{% endfor %}
+{% endif %}
+
 {% endfor %}
