@@ -106,3 +106,6 @@ haproxy_raw_keys:
   - key: use_backend
   - key: default_backend
     list_accepted: no
+
+# conf.d location
+haproxy_cfg_path: /etc/haproxy/conf.d
