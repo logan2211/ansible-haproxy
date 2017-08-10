@@ -204,6 +204,15 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.compression`: [optional]: Compression declarations
 * `haproxy_backend.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_backend.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
+* `haproxy_backend.{n}.stats`: [optional]: Stats declarations
+* `haproxy_backend.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
+* `haproxy_backend.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
+* `haproxy_backend.{n}.stats.options`: [optional]: List of boolean stats options (e.g. `hide-version`, `show-node`, `show-desc`, `show-legends`)
+* `haproxy_backend.{n}.stats.refresh`: [optional]: Defined the refresh delay, specified in seconds (e.g. `5s`)
+* `haproxy_backend.{n}.stats.admin`: [optional]: Define / enable admin part of web interface with conditional attached
+* `haproxy_backend.{n}.stats.auth`: [optional]: Auth declarations
+* `haproxy_backend.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
+* `haproxy_backend.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
 * `haproxy_backend.{n}.server`: [optional]: Server declarations
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
