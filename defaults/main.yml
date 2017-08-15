@@ -71,6 +71,9 @@ haproxy_frontend: []
 # back-end section
 haproxy_backend: []
 
+# user-lists to be used for HTTP basic auth
+haproxy_userlists: []
+
 # Keys that are rendered as verbatim strings to the haproxy configuration.
 # A "key" is the dictionary key on the haproxy_{frontend,backend,listen} list,
 # and list_accepted is defaulted to "yes". When there is a list accepted, the
