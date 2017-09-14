@@ -16,10 +16,29 @@
 - include: test-create-containers.yml
 
 - name: Playbook for role testing
-  hosts: test_containers
+  hosts: haproxy
   roles:
     - role: "{{ rolename | basename }}"
   post_tasks:
+    - name: Install socat for testing
+      package:
+        name: socat
     - name: Check if the haproxy service is running
       command: pgrep haproxy
+      changed_when: false
+
+- name: Ensure the test dynamic servers are enabled
+  hosts: test_backend_servers
+  gather_facts: no
+  tasks:
+    - name: Ensure the endpoint is enabled
+      shell: >
+        echo "show stat {{ inventory_hostname }}" |
+        socat unix-connect:/run/haproxy/admin.sock stdio |
+        grep {{ inventory_hostname }} |
+        cut -d, -f18
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['haproxy'] }}"
+      register: haproxy_status
+      failed_when: "haproxy_status.stdout != 'no check'"
       changed_when: false
