@@ -1,13 +1,17 @@
 [all]
 localhost ansible_connection=local ansible_become=True
 
-[test_containers]
+[haproxy]
 haproxy1.5 physical_host=localhost haproxy_version=1.5
 haproxy1.6 physical_host=localhost haproxy_version=1.6
 haproxy1.7 physical_host=localhost haproxy_version=1.7
 
+[test_backend_servers]
+test1 ansible_host=10.0.0.1
+test2 ansible_host=10.0.0.2
+
 [docker_containers:children]
-test_containers
+haproxy
 
 [docker_containers:vars]
 ansible_connection=docker
