@@ -67,15 +67,7 @@
     - haproxy-configuration
     - haproxy-configuration-ssl
 
-- name: update configuration file
-  template:
-    src: etc/haproxy/haproxy.cfg.j2
-    dest: /etc/haproxy/haproxy.cfg
-    owner: root
-    group: root
-    mode: 0640
-    validate: 'haproxy -f %s -c'
-  notify: reload haproxy
+- include: configure.yml
   tags:
     - configuration
     - haproxy

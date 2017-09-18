@@ -1,0 +1,28 @@
+---
+
+- name: Create configuration directory
+  file:
+    path: "{{ haproxy_confd_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0750'
+
+- name: Update configuration parts
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: '0640'
+    validate: "{{ haproxy_validation_command }}"
+  with_items: "{{ haproxy_config_templates }}"
+
+- name: Assemble HAProxy configuration
+  assemble:
+    ignore_hidden: true
+    src: "{{ haproxy_confd_path }}"
+    dest: "{{ haproxy_assembled_config }}"
+    delimiter: "### START FRAGMENT ###"
+    validate: "{{ haproxy_validation_command }}"
+  notify: reload haproxy
