@@ -1,11 +1,13 @@
 # defaults file for haproxy
 ---
-haproxy_version: 1.6
 
-haproxy_dependencies:
-  - name: haproxy
-    state: latest
-haproxy_install: []
+# This is only valid on Ubuntu. All other distros will use the version
+# provided by upstream packaging.
+haproxy_ppa_enabled: yes
+haproxy_repo: "{{ _haproxy_repo }}"
+haproxy_ppa_version: 1.6
+
+haproxy_package_state: latest
 
 # A list of groups that will be searched during dynamic backend discovery
 haproxy_backend_search: yes
@@ -34,7 +36,7 @@ haproxy_global_log:
     level: notice
 haproxy_global_stats:
   sockets:
-    - listen: /run/haproxy/admin.sock
+    - listen: /var/run/haproxy.stat
   timeout: 30s
 haproxy_global_user: haproxy
 haproxy_global_group: haproxy
@@ -61,21 +63,7 @@ haproxy_defaults_timeout:
     timeout: 50000
   - type: server
     timeout: 50000
-haproxy_defaults_errorfile:
-  - code: 400
-    file: /etc/haproxy/errors/400.http
-  - code: 403
-    file: /etc/haproxy/errors/403.http
-  - code: 408
-    file: /etc/haproxy/errors/408.http
-  - code: 500
-    file: /etc/haproxy/errors/500.http
-  - code: 502
-    file: /etc/haproxy/errors/502.http
-  - code: 503
-    file: /etc/haproxy/errors/503.http
-  - code: 504
-    file: /etc/haproxy/errors/504.http
+haproxy_defaults_errorfile: "{{ _haproxy_defaults_errorfile }}"
 
 # ssl (file) map
 haproxy_ssl_map: []

@@ -23,9 +23,17 @@
     - name: Install socat for testing
       package:
         name: socat
-    - name: Check if the haproxy service is running
-      command: pgrep haproxy
-      changed_when: false
+    - block:
+        - name: Check if the haproxy service is running
+          command: pgrep haproxy
+          changed_when: false
+      rescue:
+        - name: Capture the HAProxy journalctl logs
+          command: journalctl -n 100 -u haproxy
+          register: haproxy_journal
+        - name: Output the HAProxy journal
+          debug:
+            msg: "{{ haproxy_journal.stdout }}"
 
 - name: Ensure the test dynamic servers are enabled
   hosts: test_backend_servers
@@ -34,7 +42,7 @@
     - name: Ensure the endpoint is enabled
       shell: >
         echo "show stat {{ inventory_hostname }}" |
-        socat unix-connect:/run/haproxy/admin.sock stdio |
+        socat unix-connect:/var/run/haproxy.stat stdio |
         grep {{ inventory_hostname }} |
         cut -d, -f18
       delegate_to: "{{ item }}"

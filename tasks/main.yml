@@ -1,32 +1,18 @@
 # tasks file for haproxy
 ---
-- name: Check HAProxy version selection
-  fail:
-    msg: "HAProxy version {{ haproxy_version }} is not supported"
-  when: haproxy_version not in haproxy_versions_supported
+- name: Gather variables for each operating system
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
+    - "{{ ansible_distribution | lower }}.yml"
+    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_version.split('.')[0] }}.yml"
+    - "{{ ansible_os_family | lower }}.yml"
   tags:
-    - configuration
-    - haproxy
-    - haproxy-check-version-support
+    - always
 
-- name: Add HAProxy PPA
-  apt_repository:
-    repo: "{{ haproxy_ppa }}"
-    update_cache: true
+- include: install.yml
   tags:
-    - configuration
-    - haproxy
-    - haproxy-add-repository
-
-- name: Install HAProxy apt packages
-  apt:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
-  with_items: "{{ haproxy_dependencies }}"
-  tags:
-    - configuration
-    - haproxy
-    - haproxy-install
+    - install
 
 - name: Create certificate directories on target hosts
   file:
