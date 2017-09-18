@@ -25,4 +25,5 @@
     dest: "{{ haproxy_assembled_config }}"
     delimiter: "### START FRAGMENT ###"
     validate: "{{ haproxy_validation_command }}"
-  notify: reload haproxy
+  notify:
+    - Reload HAProxy

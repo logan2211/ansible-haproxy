@@ -60,7 +60,8 @@
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0640') }}"
   with_items: "{{ haproxy_ssl_map }}"
-  notify: reload haproxy
+  notify:
+    - Reload HAProxy
   tags:
     - configuration
     - haproxy
@@ -75,9 +76,9 @@
 
 - name: start and enable service
   service:
-    name: haproxy
-    state: started
-    enabled: true
+    name: "{{ haproxy_service_name }}"
+    state: "{{ haproxy_service_state }}"
+    enabled: "{{ haproxy_service_enabled }}"
   tags:
     - configuration
     - haproxy
