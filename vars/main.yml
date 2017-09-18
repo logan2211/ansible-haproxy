@@ -7,6 +7,7 @@ haproxy_versions_supported:
 
 haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
 
+haproxy_service_name: haproxy
 haproxy_assembled_config: /etc/haproxy/haproxy.cfg
 haproxy_validation_command: 'haproxy -f %s -c'
 

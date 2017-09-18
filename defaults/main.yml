@@ -16,6 +16,9 @@ haproxy_backend_search_var: haproxy_backend_member
 haproxy_confd_path: /etc/haproxy/conf.d
 haproxy_config_templates: "{{ _haproxy_config_templates }}"
 
+haproxy_service_state: started
+haproxy_service_enabled: yes
+
 # Some haproxy features will not work well with reload and require a hard
 # restart instead. By default we will use the reloaded state and users can
 # change the handler to perform a hard-restart when configuration change
