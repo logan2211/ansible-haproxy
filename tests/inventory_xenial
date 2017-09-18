@@ -3,6 +3,9 @@ localhost ansible_connection=local ansible_become=True
 
 [haproxy]
 haproxy_distro haproxy_ppa_enabled=no
+haproxy1.5 haproxy_version=1.5
+haproxy1.6 haproxy_version=1.6
+haproxy1.7 haproxy_version=1.7
 
 [test_backend_servers]
 test1 ansible_host=10.0.0.1
