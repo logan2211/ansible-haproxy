@@ -6,3 +6,10 @@ haproxy_versions_supported:
   - 1.7
 
 haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
+
+haproxy_assembled_config: /etc/haproxy/haproxy.cfg
+haproxy_validation_command: 'haproxy -f %s -c'
+
+_haproxy_config_templates:
+  - src: etc/haproxy/haproxy.cfg.j2
+    dest: "{{ haproxy_confd_path }}/10-haproxy.cfg"
