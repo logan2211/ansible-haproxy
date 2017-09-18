@@ -46,3 +46,5 @@ before_cache:
     | xargs -n 2 -t sh -c 'test -e ${cache_dir}/$1.tar.gz || docker save $0 | gzip -2 > ${cache_dir}/$1.tar.gz'
 notifications:
   email: false
+  slack:
+    secure: F+5nAYLL5CbeGpMaRLhadmXMREDXRXn0VkhmedtD/m+zMQJheUzdB+mnReGJoADDfUULUrFKouQiWhWRp+un36jbq7SfQz5fLtZLmhGpdyClGOcex49WO4i4vm9CkuWMh48i7MMn17irNreHSG40nUllVsmsMUdutevgBAlM8SkYtwHGaEtCkFQPPipahs8vrBpK767zRjez87QTuJyRxjAyBvjG+GGuLL8B430/ywzajbU0AYj+SctoYUi9MTpAjLAZTXdbcUSk/84ggTbuXkuXymSyC+9h2aJhI3Poy00jwJR6rZHMTrdOk/U6RrqIcSMniUWvU/ve85cTFCigQr5Vrb97jcQQ3AFMUuosZlVWMMjyoC/Mp3n6aztd11Op9LKeQ+xSlIKkpvGpWTr2uuX4/teGzK52NZM2JV3egZxEPKrPjQ0CnAho/DhGPN7n9qNKUAucaM51qV5rO3xVjd7V8e5coKxWq+3FqT3cdOJaAXsO9ScCPegg76TOxhu2r7CDW4keTvNjZwpfisYJCCueKQ44v1HxJN+gDk89Kpl3sdqdcmRqgq7Kc0arDsZgCPbm/zo38pnHaTWXqBlMUnxS51+HSzSODTqhdpGspelxRSHBuTY/JrhzyNVdacwaZkbKa4GUSG3HPDQMXdmjZk+yAf2hGsgLgdmkCo5GZyU=
