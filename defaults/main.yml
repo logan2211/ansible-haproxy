@@ -96,6 +96,8 @@ haproxy_raw_keys:
     list_accepted: no
   - key: source
     list_accepted: no
+  - key: nolog
+    config_key: 'no log'
   - key: option
   - key: no_option
     config_key: 'no option'
