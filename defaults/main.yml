@@ -77,7 +77,7 @@ haproxy_frontend: []
 # back-end section
 haproxy_backend: []
 
-# user-lists to be used for HTTP basic auth
+# user-lists section
 haproxy_userlists: []
 
 # Keys that are rendered as verbatim strings to the haproxy configuration.
