@@ -15,7 +15,7 @@
 
 - name: Ensure docker-py is installed
   pip:
-    name: docker-py
+    name: docker
   when: "inventory_hostname == ansible_play_hosts[0]"
 
 - name: Ensure docker container
