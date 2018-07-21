@@ -3,8 +3,6 @@ localhost ansible_connection=local ansible_become=True
 
 [haproxy]
 haproxy_distro haproxy_ppa_enabled=no
-haproxy1.5 haproxy_ppa_version=1.5
-haproxy1.6 haproxy_ppa_version=1.6
 haproxy1.7 haproxy_ppa_version=1.7
 haproxy1.8 haproxy_ppa_version=1.8
 
