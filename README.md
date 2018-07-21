@@ -2,7 +2,13 @@
 
 [![Build Status](https://travis-ci.org/logan2211/ansible-haproxy.svg?branch=master)](https://travis-ci.org/logan2211/ansible-haproxy)
 
-Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu systems.
+Set up (the latest version of) [HAProxy](http://www.haproxy.org/).
+
+#### Supported Operating Systems
+- Ubuntu 16.04 (Xenial)
+- Ubuntu 18.04 (Bionic)
+- RHEL/CentOS 7
+- openSUSE 42.3
 
 #### Requirements
 

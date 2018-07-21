@@ -5,7 +5,7 @@
 # provided by upstream packaging.
 haproxy_ppa_enabled: yes
 haproxy_repo: "{{ _haproxy_repo }}"
-haproxy_ppa_version: 1.6
+haproxy_ppa_version: 1.8
 
 haproxy_package_state: latest
 
