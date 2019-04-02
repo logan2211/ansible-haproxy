@@ -15,6 +15,6 @@
 
 haproxy_distro_packages:
   - haproxy
-  - nc # Used for the Ansible haproxy module
+  - nc  # Used for the Ansible haproxy module
 
 haproxy_defaults_errorfile_path: /usr/share/haproxy

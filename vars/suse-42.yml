@@ -15,6 +15,6 @@
 
 haproxy_distro_packages:
   - haproxy
-  - netcat # Used for the Ansible haproxy module
+  - netcat  # Used for the Ansible haproxy module
 
 _haproxy_defaults_errorfile: []

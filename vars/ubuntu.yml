@@ -24,6 +24,6 @@ haproxy_ppa_key: '0x1C61B9CD'
 
 haproxy_distro_packages:
   - haproxy
-  - netcat # Used for the Ansible haproxy module
+  - netcat  # Used for the Ansible haproxy module
 
 haproxy_defaults_errorfile_path: /etc/haproxy/errors

@@ -37,6 +37,7 @@ haproxy_userlists:
     users:
       - name: testuser1
         # secrete
+        # yamllint disable-line rule:line-length
         password: $6$gLMr0TwOYURPhpXh$onP.5aHZGPE3xufyF8U0/wEKHMz71ECFBx4.uiO7t2ypgyvXS6MNFKHTo16qLttYJYObb0WbXyDmoNRsO4jtq.
         groups:
           - test_grp1

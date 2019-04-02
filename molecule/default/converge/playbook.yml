@@ -52,3 +52,5 @@
       register: haproxy_status
       failed_when: "haproxy_status.stdout != 'no check'"
       changed_when: false
+      tags:
+        - skip_ansible_lint
