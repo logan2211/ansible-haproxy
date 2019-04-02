@@ -32,6 +32,8 @@ platforms:
     name: haproxy1.7
   - <<: *instance_base
     name: haproxy1.8
+  - <<: *instance_base
+    name: haproxy1.9
 provisioner:
   name: ansible
   config_options:
