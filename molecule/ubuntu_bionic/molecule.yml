@@ -1,0 +1,44 @@
+---
+_instance_base: &instance_base
+  image: "${docker_image:-quay.io/loganv/docker-ci}:${docker_image_tag:-ubuntu-bionic}"
+  # NOTE(logan): Uncomment user arg once upstream PR is released
+  # https://github.com/metacloud/molecule/pull/1526
+  # user: root
+  command: ${docker_command:-/lib/systemd/systemd}
+  volumes:
+    - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  privileged: true
+  pre_build_image: true
+  groups:
+    - haproxy
+  networks:
+    - name: haproxy
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint:
+  name: yamllint
+  options:
+    config-file: molecule/default/yaml-lint.yml
+platforms:
+  - <<: *instance_base
+    name: haproxy_distro
+  - <<: *instance_base
+    name: haproxy1.7
+  - <<: *instance_base
+    name: haproxy1.8
+provisioner:
+  name: ansible
+  config_options:
+    defaults:
+      stdout_callback: yaml
+  lint:
+    name: ansible-lint
+  playbooks:
+    # NOTE(logan): Use custom create playbook with user: root until upstream
+    # merges https://github.com/metacloud/molecule/pull/1526
+    create: ../default/create.yml
+    converge: ../default/converge/playbook.yml
+scenario:
+  name: ubuntu_bionic

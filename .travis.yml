@@ -1,3 +1,5 @@
+---
+dist: xenial
 language: python
 cache:
   timeout: 3600
@@ -7,28 +9,39 @@ cache:
 services:
   - docker
 
+# Distros
+_distro_base: &distro_base
+  scenario_name: default
+
 _ubuntu_xenial_build: &ubuntu_xenial_build
+  <<: *distro_base
   docker_image_tag: ubuntu-xenial
   CACHE_NAME: xenial
-  TOXENV: functional_stable
-  INVENTORY_FILE: inventory_xenial
+  scenario_name: ubuntu_xenial
 
 _ubuntu_bionic_build: &ubuntu_bionic_build
+  <<: *distro_base
   docker_image_tag: ubuntu-bionic
   CACHE_NAME: bionic
-  TOXENV: functional_stable
-  INVENTORY_FILE: inventory_bionic
+  scenario_name: ubuntu_bionic
 
 _centos_build: &centos_build
+  <<: *distro_base
   docker_image_tag: centos-7
   CACHE_NAME: cent7
-  TOXENV: functional_stable
 
 _opensuse_build: &opensuse_build
+  <<: *distro_base
   docker_image_tag: opensuse-42.3
   docker_command: /usr/lib/systemd/systemd
   CACHE_NAME: suse43
-  TOXENV: functional_stable
+
+# Ansible versions
+_ansible_25_build: &ansible_25_build
+  ansible_version: "'ansible>=2.5,<2.6'"
+
+_ansible_26_build: &ansible_26_build
+  ansible_version: "'ansible>=2.6,<2.7'"
 
 env:
   global:
@@ -36,52 +49,37 @@ env:
     - docker_image=quay.io/loganv/docker-ci
     - docker_command=/lib/systemd/systemd
     - cache_dir=$HOME/.docker
+    - ansible_version=ansible
 
 matrix:
   fast_finish: true
   include:
-    - env:
-        TOXENV: linters
-        CACHE_NAME: linters
-    # ANSIBLE 2.3
-    - env:
-        <<: *ubuntu_xenial_build
-        TOXENV: functional_2.3
-    - env:
-        <<: *ubuntu_bionic_build
-        TOXENV: functional_2.3
-    - env:
-        <<: *centos_build
-        TOXENV: functional_2.3
-    - env:
-        <<: *opensuse_build
-        TOXENV: functional_2.3
-    # ANSIBLE 2.4
-    - env:
-        <<: *ubuntu_xenial_build
-        TOXENV: functional_2.4
-    - env:
-        <<: *ubuntu_bionic_build
-        TOXENV: functional_2.4
-    - env:
-        <<: *centos_build
-        TOXENV: functional_2.4
-    - env:
-        <<: *opensuse_build
-        TOXENV: functional_2.4
     # ANSIBLE 2.5
     - env:
         <<: *ubuntu_xenial_build
-        TOXENV: functional_2.5
+        <<: *ansible_25_build
     - env:
         <<: *ubuntu_bionic_build
-        TOXENV: functional_2.5
+        <<: *ansible_25_build
     - env:
         <<: *centos_build
-        TOXENV: functional_2.5
+        <<: *ansible_25_build
     - env:
         <<: *opensuse_build
-        TOXENV: functional_2.5
+        <<: *ansible_25_build
+    # ANSIBLE 2.6
+    - env:
+        <<: *ubuntu_xenial_build
+        <<: *ansible_26_build
+    - env:
+        <<: *ubuntu_bionic_build
+        <<: *ansible_26_build
+    - env:
+        <<: *centos_build
+        <<: *ansible_26_build
+    - env:
+        <<: *opensuse_build
+        <<: *ansible_26_build
     # ANSIBLE STABLE
     - env:
         <<: *ubuntu_xenial_build
@@ -97,11 +95,9 @@ before_install:
   - if [[ -d ${cache_dir} ]]; then ls ${cache_dir}/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
   - if [[ -n ${docker_image_tag} ]]; then docker pull ${docker_image}:${docker_image_tag}; fi
 install:
-  - pip install tox
-before_script:
-  - curl -o ${PWD}/tox.ini https://gist.githubusercontent.com/Logan2211/c5f38423b085fbea78392f1ee10700d5/raw/tox.ini
+  - pip install -r test-requirements.txt ${ansible_version}
 script:
-  - tox
+  - molecule test -s ${scenario_name}
 before_cache:
   # Save tagged docker images
   - >
@@ -110,4 +106,6 @@ before_cache:
 notifications:
   email: false
   slack:
-    secure: F+5nAYLL5CbeGpMaRLhadmXMREDXRXn0VkhmedtD/m+zMQJheUzdB+mnReGJoADDfUULUrFKouQiWhWRp+un36jbq7SfQz5fLtZLmhGpdyClGOcex49WO4i4vm9CkuWMh48i7MMn17irNreHSG40nUllVsmsMUdutevgBAlM8SkYtwHGaEtCkFQPPipahs8vrBpK767zRjez87QTuJyRxjAyBvjG+GGuLL8B430/ywzajbU0AYj+SctoYUi9MTpAjLAZTXdbcUSk/84ggTbuXkuXymSyC+9h2aJhI3Poy00jwJR6rZHMTrdOk/U6RrqIcSMniUWvU/ve85cTFCigQr5Vrb97jcQQ3AFMUuosZlVWMMjyoC/Mp3n6aztd11Op9LKeQ+xSlIKkpvGpWTr2uuX4/teGzK52NZM2JV3egZxEPKrPjQ0CnAho/DhGPN7n9qNKUAucaM51qV5rO3xVjd7V8e5coKxWq+3FqT3cdOJaAXsO9ScCPegg76TOxhu2r7CDW4keTvNjZwpfisYJCCueKQ44v1HxJN+gDk89Kpl3sdqdcmRqgq7Kc0arDsZgCPbm/zo38pnHaTWXqBlMUnxS51+HSzSODTqhdpGspelxRSHBuTY/JrhzyNVdacwaZkbKa4GUSG3HPDQMXdmjZk+yAf2hGsgLgdmkCo5GZyU=
+    rooms:
+      # yamllint disable-line rule:line-length
+      secure: F+5nAYLL5CbeGpMaRLhadmXMREDXRXn0VkhmedtD/m+zMQJheUzdB+mnReGJoADDfUULUrFKouQiWhWRp+un36jbq7SfQz5fLtZLmhGpdyClGOcex49WO4i4vm9CkuWMh48i7MMn17irNreHSG40nUllVsmsMUdutevgBAlM8SkYtwHGaEtCkFQPPipahs8vrBpK767zRjez87QTuJyRxjAyBvjG+GGuLL8B430/ywzajbU0AYj+SctoYUi9MTpAjLAZTXdbcUSk/84ggTbuXkuXymSyC+9h2aJhI3Poy00jwJR6rZHMTrdOk/U6RrqIcSMniUWvU/ve85cTFCigQr5Vrb97jcQQ3AFMUuosZlVWMMjyoC/Mp3n6aztd11Op9LKeQ+xSlIKkpvGpWTr2uuX4/teGzK52NZM2JV3egZxEPKrPjQ0CnAho/DhGPN7n9qNKUAucaM51qV5rO3xVjd7V8e5coKxWq+3FqT3cdOJaAXsO9ScCPegg76TOxhu2r7CDW4keTvNjZwpfisYJCCueKQ44v1HxJN+gDk89Kpl3sdqdcmRqgq7Kc0arDsZgCPbm/zo38pnHaTWXqBlMUnxS51+HSzSODTqhdpGspelxRSHBuTY/JrhzyNVdacwaZkbKa4GUSG3HPDQMXdmjZk+yAf2hGsgLgdmkCo5GZyU=
