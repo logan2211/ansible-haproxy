@@ -15,7 +15,8 @@
 
 - name: Add an apt key by id from a keyserver
   apt_key:
-    keyserver: "{{ haproxy_ppa_keyserver }}"
+    keyserver: "{{ haproxy_ppa_keyserver | default(omit) }}"
+    url: "{{ haproxy_ppa_keyurl | default(omit) }}"
     id: "{{ haproxy_ppa_key }}"
   when:
     - haproxy_ppa_enabled | bool

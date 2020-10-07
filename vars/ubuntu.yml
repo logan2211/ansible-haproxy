@@ -19,7 +19,7 @@ cache_timeout: 600
 _haproxy_repo: "http://ppa.launchpad.net/vbernat/haproxy-{{ haproxy_ppa_version }}/ubuntu"
 haproxy_repo_full: "deb {{ haproxy_repo }} {{ ansible_distribution_release }} main"
 haproxy_repo_filename: haproxy
-haproxy_ppa_keyserver: keyserver.ubuntu.com
+haproxy_ppa_keyurl: "https://keyserver.ubuntu.com/pks/lookup?op=get&search={{ haproxy_ppa_key }}"
 haproxy_ppa_key: '0x1C61B9CD'
 
 haproxy_distro_packages:
